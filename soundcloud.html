@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <iframe width="100%" height="300" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/55098034&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true" id="player"></iframe>
+
+    <!-- SoundCloud API JS -->
+    <script type="text/javascript" src="https://w.soundcloud.com/player/api.js"></script>
+
+    <!-- ChanceJS - Random number generator library -->
+    <script src="http://chancejs.com/chance.min.js"></script>
+
+    <script type="text/javascript">
+        var _s = SC.Widget("player");
+        var _playlist;
+        var _currentIndex;
+
+        _s.bind(SC.Widget.Events.READY, function() {
+            _s.getSounds(function(sounds){
+                _playlist = sounds;
+                if (_playlist.length > 1) {
+                    var rndSongIndex = getRandomInt(0, _playlist.length - 1);
+                    console.log("Playing song with index " + rndSongIndex);
+                    _currentIndex = rndSongIndex;
+                    _s.skip(rndSongIndex);
+                }
+                _s.isPaused(function(paused){
+                    if (paused)
+                        _s.play();
+                });
+            });
+        });
+
+        _s.bind(SC.Widget.Events.FINISH, function() {
+            _s.getSounds(function(sounds){
+                _playlist = sounds;
+                if (_playlist.length > 1) {
+                    var rndSongIndex = getRandomInt(0, _playlist.length - 1);
+                    console.log("Playing song with index " + rndSongIndex);
+                    _currentIndex = rndSongIndex;
+                    _s.skip(rndSongIndex);
+                }
+                _s.isPaused(function(paused){
+                    if (paused)
+                        _s.play();
+                });
+            });
+        });
+
+        function getRandomInt(minNum, maxNum) {
+            var generatedInt = chance.integer({
+                min: minNum,
+                max: maxNum
+            });
+
+            while ( generatedInt == _currentIndex ) {
+                generatedInt = chance.integer({
+                    min: minNum,
+                    max: maxNum
+                });
+            }
+
+            return generatedInt;
+        }
+    </script>
+</body>
+</html>
